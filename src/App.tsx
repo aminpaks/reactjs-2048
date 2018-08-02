@@ -1,20 +1,24 @@
 import * as React from 'react';
-import './App.css';
+import { StyledAppContainer as Container } from './App.styled';
+import { Background } from './Background';
+import { Grid } from './Grid';
+import { KeyManager } from './KeyManager';
+import { tileMargin, tileWidth } from './Tile';
+import { getEmptyGrid, TileCollection } from './utils';
 
-import logo from './logo.svg';
+const size = 4;
 
 class App extends React.Component {
+  public state = { tiles: getEmptyGrid(size) };
+  public handleChange = (tiles: TileCollection[]) => this.setState({ tiles });
   public render() {
+    const { tiles } = this.state;
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </div>
+      <Container>
+        <KeyManager tiles={tiles} onChange={this.handleChange} />
+        <Background size={size} tileWidth={tileWidth} tileMargin={tileMargin} />
+        <Grid tiles={tiles} />
+      </Container>
     );
   }
 }

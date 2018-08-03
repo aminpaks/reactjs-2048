@@ -39,10 +39,16 @@ export const cleanNulls = (collection: TileCollection) =>
 export const sanitizePair = (
   first: PTileModel,
   second: PTileModel,
+  direction: DirectionType,
 ): TileModel[] => {
   if (first || second) {
     if (first && second && first.value === second.value) {
-      return [getTile({ ...first, value: first.value + second.value })];
+      return [
+        getTile({
+          ...(['right', 'bottom'].indexOf(direction) >= 0 ? first : second),
+          value: first.value + second.value,
+        }),
+      ];
     }
     return [...(first ? [first] : []), ...(second ? [second] : [])];
   }
@@ -58,7 +64,7 @@ export const moveTilesToSide = (
     TileCollection
   >((acc, tile) => {
     const first = acc.pop() || null;
-    const pair = sanitizePair(first, tile);
+    const pair = sanitizePair(first, tile, direction);
     return [...acc, ...pair];
   }, []);
 

@@ -112,7 +112,7 @@ describe('Grid utility functions', () => {
       expect(result[3][1]).toEqual(originalTiles[1][1]);
       // Third column is a total from originalTiles 1x2 and 2x2 with value 4
       expect(result[3][2]!.value).toBe(4);
-      expect(result[3][2]!.id).toBe(originalTiles[2][2]!.id);
+      expect(result[3][2]!.id).toBe(originalTiles[1][2]!.id);
       // Forth column is from originalTiles 3x3
       expect(result[3][3]).toEqual(originalTiles[3][3]);
     });

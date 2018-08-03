@@ -26,8 +26,6 @@ export class KeyManager extends Component<KeyManagerProps> {
   public handleKeyDown = ({ code }: KeyboardEvent) => {
     const { onChange, tiles } = this.props;
     if (typeof onChange === 'function') {
-      // tslint:disable-next-line:no-console
-      console.log(code);
       const updatedTiles = moveTiles(code, tiles);
 
       if (updatedTiles) {

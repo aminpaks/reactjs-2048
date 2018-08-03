@@ -20,13 +20,15 @@ export const Tile = ({
   tile: TileModel;
 }) => (
   <Container
-    width={tileWidth}
-    margin={tileMargin}
     style={{
+      height: tileWidth,
       left: getColumn(gridSize, index) * (tileWidth + tileMargin),
+      marginLeft: tileMargin,
+      marginTop: tileMargin,
       top: getRow(gridSize, index) * (tileWidth + tileMargin),
+      width: tileWidth,
     }}
   >
-    {tile.value}
+    <span>{tile.value}</span>
   </Container>
 );

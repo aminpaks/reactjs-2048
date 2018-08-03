@@ -5,6 +5,7 @@ import {
   moveTilesToSide,
   PTileModel,
   TileCollection,
+  getTile,
 } from './tile';
 
 export const getGridSize = (tiles: TileCollection[]) => {
@@ -63,17 +64,72 @@ export const moveTwoDimensionTilesTo = (
   return swapMatrixByDirectionCurried(movedTiles);
 };
 
+export const turnGridToFlatArray = (tiles: TileCollection[]) =>
+  tiles.reduce<TileCollection>((acc, row) => [...acc, ...row], []);
+
+export const turnFlatArrayToGrid = (rowLength: number, tiles: TileCollection) =>
+  tiles.reduce(
+    (acc, tile) => {
+      const { collection, row: currentRowIndex } = acc;
+      const currentRowLength = collection[currentRowIndex].length;
+      const currentRow = currentRowLength >= rowLength ? [] : collection.pop()!;
+
+      return {
+        collection: [...collection, [...currentRow, tile]],
+        row:
+          currentRowLength >= rowLength ? currentRowIndex + 1 : currentRowIndex,
+      };
+    },
+    { row: 0, collection: [[]] } as {
+      row: number;
+      collection: TileCollection[];
+    },
+  ).collection;
+
+export const fillFirstAvailableEmptyTile = (tiles: TileCollection) =>
+  tiles.reduce(
+    (acc, tile) => {
+      if (acc.filled || tile) {
+        return { ...acc, collection: [...acc.collection, tile] };
+      }
+      return {
+        collection: [...acc.collection, getTile()],
+        filled: true,
+      };
+    },
+    {
+      collection: [],
+      filled: false,
+    } as { filled: boolean; collection: TileCollection },
+  );
+
 export const fillWithRandomTile = (tiles: TileCollection[]) => {
   const { row: rowLength, column: columnLength } = getGridSize(tiles);
   const fullLength = rowLength * columnLength;
 
-  const startPoint = getRandom(0, fullLength);
-  // tslint:disable-next-line:no-console
-  console.log(fullLength, startPoint);
-  // tslint:disable-next-line:no-console
-  console.log('ok 2 2');
+  const startPoint = getRandom(0, fullLength - 1);
 
-  // do {
-  //   for (let i = start)
-  // } while (true);
+  const flatten = turnGridToFlatArray(tiles);
+  const firstPart = flatten.slice(0, startPoint);
+  const secondPart = flatten.slice(startPoint);
+
+  const potentialFilledSecondPart = fillFirstAvailableEmptyTile(secondPart);
+
+  if (potentialFilledSecondPart.filled) {
+    return turnFlatArrayToGrid(rowLength, [
+      ...firstPart,
+      ...potentialFilledSecondPart.collection,
+    ]);
+  }
+
+  const potentialFilledFirstPart = fillFirstAvailableEmptyTile(firstPart);
+
+  if (potentialFilledFirstPart.filled) {
+    return turnFlatArrayToGrid(rowLength, [
+      ...potentialFilledFirstPart.collection,
+      ...secondPart,
+    ]);
+  }
+
+  return null;
 };

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import EventListener from 'react-event-listener';
-import { moveTwoDimensionTilesTo, TileCollection } from './utils';
+import { moveTwoDimensionTilesTo, PTileCollection } from './utils';
 
 interface KeyManagerProps {
-  tiles: TileCollection[];
-  onChange?: (tiles: TileCollection[]) => void;
+  tiles: PTileCollection[];
+  onChange?: (tiles: ReadonlyArray<PTileCollection>) => void;
 }
 
-export const moveTiles = (code: string, tiles: TileCollection[]) => {
+export const moveTiles = (code: string, tiles: PTileCollection[]) => {
   switch (code) {
     case 'ArrowUp':
       return moveTwoDimensionTilesTo(tiles, 'top');
@@ -26,8 +26,6 @@ export class KeyManager extends Component<KeyManagerProps> {
   public handleKeyDown = ({ code }: KeyboardEvent) => {
     const { onChange, tiles } = this.props;
     if (typeof onChange === 'function') {
-      // tslint:disable-next-line:no-console
-      console.log(code);
       const updatedTiles = moveTiles(code, tiles);
 
       if (updatedTiles) {

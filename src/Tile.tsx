@@ -11,22 +11,22 @@ const getRow = (gridSize: number, index: number) =>
 const getColumn = (gridSize: number, index: number) => index % gridSize;
 
 export const Tile = ({
-  index,
   gridSize,
   tile,
 }: {
-  index: number;
   gridSize: number;
   tile: TileModel;
 }) => (
   <Container
-    width={tileWidth}
-    margin={tileMargin}
     style={{
-      left: getColumn(gridSize, index) * (tileWidth + tileMargin),
-      top: getRow(gridSize, index) * (tileWidth + tileMargin),
+      height: tileWidth,
+      left: getColumn(gridSize, tile.index) * (tileWidth + tileMargin),
+      marginLeft: tileMargin,
+      marginTop: tileMargin,
+      top: getRow(gridSize, tile.index) * (tileWidth + tileMargin),
+      width: tileWidth,
     }}
   >
-    {tile.value}
+    <span>{tile.value}</span>
   </Container>
 );

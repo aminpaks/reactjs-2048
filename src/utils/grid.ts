@@ -2,10 +2,10 @@ import { buildArray } from './arrays';
 import { getRandom } from './random';
 import {
   DirectionType,
+  getTile,
   moveTilesToSide,
   PTileModel,
   TileCollection,
-  getTile,
 } from './tile';
 
 export const getGridSize = (tiles: TileCollection[]) => {

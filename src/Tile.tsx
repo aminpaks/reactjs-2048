@@ -5,12 +5,26 @@ import { TileModel } from './utils';
 export const tileWidth = 80;
 export const tileMargin = 4;
 
-export const Tile = ({ index, tile }: { index: number; tile: TileModel }) => (
+const getRow = (gridSize: number, index: number) =>
+  Math.floor(index / gridSize);
+
+const getColumn = (gridSize: number, index: number) => index % gridSize;
+
+export const Tile = ({
+  index,
+  gridSize,
+  tile,
+}: {
+  index: number;
+  gridSize: number;
+  tile: TileModel;
+}) => (
   <Container
     width={tileWidth}
     margin={tileMargin}
     style={{
-      left: index * (tileWidth + tileMargin),
+      left: getColumn(gridSize, index) * (tileWidth + tileMargin),
+      top: getRow(gridSize, index) * (tileWidth + tileMargin),
     }}
   >
     {tile.value}

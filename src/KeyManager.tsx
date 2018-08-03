@@ -7,23 +7,32 @@ interface KeyManagerProps {
   onChange?: (tiles: TileCollection[]) => void;
 }
 
+export const moveTiles = (code: string, tiles: TileCollection[]) => {
+  switch (code) {
+    case 'ArrowUp':
+      return moveTwoDimensionTilesTo(tiles, 'top');
+    case 'ArrowLeft':
+      return moveTwoDimensionTilesTo(tiles, 'left');
+    case 'ArrowRight':
+      return moveTwoDimensionTilesTo(tiles, 'right');
+    case 'ArrowDown':
+      return moveTwoDimensionTilesTo(tiles, 'bottom');
+    default:
+      return null;
+  }
+};
+
 export class KeyManager extends Component<KeyManagerProps> {
   public handleKeyDown = ({ code }: KeyboardEvent) => {
     const { onChange, tiles } = this.props;
-    if (typeof onChange !== 'function') {
-      return;
-    }
-    switch (code) {
-      case 'ArrowTop':
-        return onChange(moveTwoDimensionTilesTo(tiles, 'top'));
-      case 'ArrowLeft':
-        return onChange(moveTwoDimensionTilesTo(tiles, 'left'));
-      case 'ArrowRight':
-        return onChange(moveTwoDimensionTilesTo(tiles, 'right'));
-      case 'ArrowBottom':
-        return onChange(moveTwoDimensionTilesTo(tiles, 'bottom'));
-      default:
-        return;
+    if (typeof onChange === 'function') {
+      // tslint:disable-next-line:no-console
+      console.log(code);
+      const updatedTiles = moveTiles(code, tiles);
+
+      if (updatedTiles) {
+        onChange(updatedTiles);
+      }
     }
   };
   public render() {

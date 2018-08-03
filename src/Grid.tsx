@@ -1,23 +1,31 @@
 import React from 'react';
 import {
   StyledGridContainer as Container,
-  StyledGridRow as Row,
+  StyledGridWrapper as Wrapper,
 } from './Grid.styled';
-import { Tile, tileMargin, tileWidth } from './Tile';
-import { TileCollection } from './utils';
+import { Tile } from './Tile';
+import { TileCollection, turnGridToFlatArray } from './utils';
 
-export const Grid = ({ tiles }: { tiles: TileCollection[] }) => (
+export const Grid = ({
+  tiles,
+  gridSize,
+}: {
+  gridSize: number;
+  tiles: TileCollection[];
+}) => (
   <Container>
-    {tiles.map((row, rowIndex) => (
-      <Row
-        key={String(rowIndex)}
-        style={{ height: rowIndex * (tileWidth + tileMargin) }}
-      >
-        {row.map(
-          (tile, columnIndex) =>
-            tile && <Tile key={tile.id} index={columnIndex} tile={tile} />,
-        )}
-      </Row>
-    ))}
+    <Wrapper>
+      {turnGridToFlatArray(tiles).map(
+        (tile, tileIndex) =>
+          tile && (
+            <Tile
+              key={tile.id}
+              index={tileIndex}
+              gridSize={gridSize}
+              tile={tile}
+            />
+          ),
+      )}
+    </Wrapper>
   </Container>
 );

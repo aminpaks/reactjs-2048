@@ -9,7 +9,7 @@ export const StyledGridContainer = styled.div`
   z-index: 1;
 `;
 
-export const StyledGridRow = styled.div`
+export const StyledGridWrapper = styled.div`
   position: relative;
 `;
 

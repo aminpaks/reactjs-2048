@@ -4,20 +4,37 @@ import { Background } from './Background';
 import { Grid } from './Grid';
 import { KeyManager } from './KeyManager';
 import { tileMargin, tileWidth } from './Tile';
-import { getEmptyGrid, TileCollection } from './utils';
+import { fillWithRandomTile, getEmptyGrid, TileCollection } from './utils';
 
 const size = 4;
 
-class App extends React.Component {
-  public state = { tiles: getEmptyGrid(size) };
-  public handleChange = (tiles: TileCollection[]) => this.setState({ tiles });
+class App extends React.Component<
+  any,
+  { ended: boolean; tiles: TileCollection[] }
+> {
+  public state = {
+    ended: false,
+    tiles: fillWithRandomTile(getEmptyGrid(size))!,
+  };
+  public handleChange = (tiles: TileCollection[]) => {
+    const filledOneEmptyTile = fillWithRandomTile(tiles);
+
+    if (filledOneEmptyTile) {
+      return this.setState({ tiles: filledOneEmptyTile });
+    }
+
+    return this.setState({ ended: true });
+  };
   public render() {
-    const { tiles } = this.state;
+    const { tiles, ended } = this.state;
     return (
       <Container>
-        <KeyManager tiles={tiles} onChange={this.handleChange} />
+        <KeyManager
+          tiles={tiles}
+          onChange={ended ? undefined : this.handleChange}
+        />
         <Background size={size} tileWidth={tileWidth} tileMargin={tileMargin} />
-        <Grid tiles={tiles} />
+        <Grid gridSize={size} tiles={tiles} />
       </Container>
     );
   }

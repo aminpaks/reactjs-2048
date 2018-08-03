@@ -20,6 +20,7 @@ export const StyledTileContainer = styled.div<{
   margin-left: ${props => props.margin}px;
   font-size: 20px;
   background: yellow;
+  transition: 130ms ease-out;
   user-select: none;
   cursor: default;
 `;

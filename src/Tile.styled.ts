@@ -37,4 +37,20 @@ export const StyledTileContainer = styled.div`
     );
     box-shadow: 0 0 20px 1px inset #fff;
   }
+
+  &.tile-enter {
+    transform: scale(0);
+  }
+  &.tile-enter-active {
+    transform: scale(1);
+    z-index: 2;
+  }
+  &.tile-exit {
+    opacity: 1;
+    transform: scale(1);
+  }
+  &.tile-exit-active {
+    opacity: 0;
+    transform: scale(0);
+  }
 `;

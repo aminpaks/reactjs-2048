@@ -1,3 +1,4 @@
+import isEqual from 'fast-deep-equal';
 import { buildArray } from './arrays';
 import { getEmptyRandomIndex } from './random';
 import {
@@ -124,4 +125,14 @@ export const fillWithRandomTile = (gridSize: number, tiles: TileCollection) => {
   }
 
   return null;
+};
+
+export const isCollectionSame = (
+  first: TileCollection,
+  second: TileCollection,
+) => {
+  const shallowFirst = [...first].sort((a, b) => a.index - b.index);
+  const shallowSecond = [...second].sort((a, b) => a.index - b.index);
+
+  return isEqual(shallowFirst, shallowSecond);
 };

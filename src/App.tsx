@@ -20,7 +20,7 @@ class App extends React.Component<
   { end: boolean; tiles: TileCollection }
 > {
   public state = {
-    end: true,
+    end: false,
     tiles: fillWithRandomTile(gridSize, [] as TileCollection)!,
   };
 

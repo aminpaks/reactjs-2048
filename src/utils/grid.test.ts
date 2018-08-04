@@ -151,4 +151,82 @@ describe('Grid utility functions', () => {
       expect(result).not.toEqual(originalTiles);
     });
   });
+
+  describe.only('test', () => {
+    const tiles = [
+      [
+        {
+          id: '67983402000117390000-87883308875296540000',
+          index: 3,
+          updated: 1533347163026,
+          value: 4,
+        },
+        null,
+        null,
+        null,
+      ],
+      [
+        {
+          id: '84024975225511120000-55138240607216500000',
+          index: 7,
+          updated: 1533347008462,
+          value: 2,
+        },
+        {
+          id: '29127723846713405000-42705768595668840000',
+          updated: 1533347163676,
+          value: 2,
+        },
+        null,
+        null,
+      ],
+      [
+        {
+          id: '28885718182740017000-78401773748810510000',
+          index: 11,
+          updated: 1533347013039,
+          value: 8,
+        },
+        {
+          id: '84590067259582800000-92500659183458980000',
+          index: 10,
+          updated: 1533347147595,
+          value: 4,
+        },
+        null,
+        null,
+      ],
+      [
+        {
+          id: '87595587756750390000-77413212973021410000',
+          index: 15,
+          updated: 1533347000133,
+          value: 16,
+        },
+        {
+          id: '8979232296304973000-64619379891120870000',
+          index: 14,
+          updated: 1533347013039,
+          value: 4,
+        },
+        {
+          id: '52600275159288540000-14275365010472374000',
+          index: 13,
+          updated: 1533347014336,
+          value: 2,
+        },
+        {
+          id: '23052107976305590000-59933654239339586000',
+          index: 12,
+          updated: 1533347014336,
+          value: 4,
+        },
+      ],
+    ];
+    // const result = moveTwoDimensionTilesTo(tiles, 'bottom');
+    // tslint:disable-next-line:no-console
+    console.log(tiles);
+    // console.log(result);
+    expect(true).toBeFalsy();
+  });
 });

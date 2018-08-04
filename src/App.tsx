@@ -1,32 +1,40 @@
+import isEqual from 'fast-deep-equal';
 import * as React from 'react';
 import { StyledAppContainer as Container } from './App.styled';
 import { Background } from './Background';
 import { Grid } from './Grid';
 import { KeyManager } from './KeyManager';
 import { tileMargin, tileWidth } from './Tile';
-import { fillWithRandomTile, getEmptyGrid, TileCollection } from './utils';
+import { fillWithRandomTile, getEmptyGrid, PTileCollection } from './utils';
 
 const size = 4;
 
 class App extends React.Component<
   any,
-  { ended: boolean; tiles: TileCollection[] }
+  { ended: boolean; tiles: PTileCollection[] }
 > {
   public state = {
     ended: false,
     tiles: fillWithRandomTile(getEmptyGrid(size))!,
   };
-  public handleChange = (tiles: TileCollection[]) => {
-    const filledOneEmptyTile = fillWithRandomTile(tiles);
+  public handleChange = (updatedTiles: PTileCollection[]) => {
+    this.setState(({ tiles: currentTiles }) => {
+      if (isEqual(updatedTiles, currentTiles)) {
+        return null;
+      }
 
-    if (filledOneEmptyTile) {
-      return this.setState({ tiles: filledOneEmptyTile });
-    }
+      const filledOneEmptyTile = fillWithRandomTile(updatedTiles);
 
-    return this.setState({ ended: true });
+      if (filledOneEmptyTile) {
+        return { tiles: filledOneEmptyTile };
+      }
+
+      return { ended: true } as any;
+    });
   };
   public render() {
     const { tiles, ended } = this.state;
+    (window as any).tiles = tiles;
     return (
       <Container>
         <KeyManager

@@ -4,11 +4,11 @@ import {
   DirectionType,
   getTile,
   moveTilesToSide,
+  PTileCollection,
   PTileModel,
-  TileCollection,
 } from './tile';
 
-export const getGridSize = (tiles: TileCollection[]) => {
+export const getGridSize = (tiles: PTileCollection[]) => {
   const { length: row } = tiles;
   const { length: column } = tiles[0];
   return {
@@ -21,12 +21,12 @@ export const getEmptyGrid = (size: number) => {
   return buildArray<PTileModel>(size).map(row => buildArray<PTileModel>(size));
 };
 
-export const getTilesBy = (tiles: TileCollection[]) => tiles;
+export const getTilesBy = (tiles: PTileCollection[]) => tiles;
 
 export const swapMatrixByDirection = (
   size: number,
   direction: DirectionType,
-  tiles: TileCollection[],
+  tiles: PTileCollection[],
 ) => {
   switch (direction) {
     case 'left':
@@ -35,10 +35,12 @@ export const swapMatrixByDirection = (
     case 'top':
     case 'bottom':
     default:
-      const result: TileCollection[] = getEmptyGrid(size);
+      const result: PTileCollection[] = getEmptyGrid(size);
       for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
-          result[j][i] = tiles[i][j];
+          result[j][i] = tiles[i][j]
+            ? ({ ...tiles[i][j] } as PTileModel)
+            : null;
         }
       }
       return result;
@@ -46,28 +48,45 @@ export const swapMatrixByDirection = (
 };
 
 export const moveTwoDimensionTilesTo = (
-  tiles: TileCollection[],
+  tiles: PTileCollection[],
   direction: DirectionType,
-): TileCollection[] => {
+): ReadonlyArray<PTileCollection> => {
   const rowLength = getGridSize(tiles).row;
   // Partial application of swapMatrixByDirection
   const swapMatrixByDirectionCurried = swapMatrixByDirection.bind(
     null,
     rowLength,
     direction,
-  ) as (tiles: TileCollection[]) => TileCollection[];
+  ) as (tiles: PTileCollection[]) => PTileCollection[];
 
   const movedTiles = swapMatrixByDirectionCurried(tiles).map(row =>
     moveTilesToSide(row, direction),
   );
 
-  return swapMatrixByDirectionCurried(movedTiles);
+  return Object.freeze(swapMatrixByDirectionCurried(movedTiles));
 };
 
-export const turnGridToFlatArray = (tiles: TileCollection[]) =>
-  tiles.reduce<TileCollection>((acc, row) => [...acc, ...row], []);
+export const turnGridToFlatArray = (tiles: PTileCollection[]) =>
+  Object.freeze(
+    tiles.reduce<PTileCollection>(
+      (acc, row, rowIndex) => [
+        ...acc,
+        ...row.map(
+          (tile, columnIndex) =>
+            tile && {
+              ...tile,
+              index: rowIndex * 4 + columnIndex,
+            },
+        ),
+      ],
+      [],
+    ),
+  );
 
-export const turnFlatArrayToGrid = (rowLength: number, tiles: TileCollection) =>
+export const turnFlatArrayToGrid = (
+  rowLength: number,
+  tiles: PTileCollection,
+) =>
   tiles.reduce(
     (acc, tile) => {
       const { collection, row: currentRowIndex } = acc;
@@ -82,11 +101,11 @@ export const turnFlatArrayToGrid = (rowLength: number, tiles: TileCollection) =>
     },
     { row: 0, collection: [[]] } as {
       row: number;
-      collection: TileCollection[];
+      collection: PTileCollection[];
     },
   ).collection;
 
-export const fillFirstAvailableEmptyTile = (tiles: TileCollection) =>
+export const fillFirstAvailableEmptyTile = (tiles: PTileCollection) =>
   tiles.reduce(
     (acc, tile) => {
       if (acc.filled || tile) {
@@ -100,10 +119,10 @@ export const fillFirstAvailableEmptyTile = (tiles: TileCollection) =>
     {
       collection: [],
       filled: false,
-    } as { filled: boolean; collection: TileCollection },
+    } as { filled: boolean; collection: PTileCollection },
   );
 
-export const fillWithRandomTile = (tiles: TileCollection[]) => {
+export const fillWithRandomTile = (tiles: PTileCollection[]) => {
   const { row: rowLength, column: columnLength } = getGridSize(tiles);
   const fullLength = rowLength * columnLength;
 

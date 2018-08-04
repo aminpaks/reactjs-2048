@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyledAppContainer as Container } from './App.styled';
 import { Background } from './Background';
+import { End } from './End';
 import { Grid } from './Grid';
 import { KeyManager } from './KeyManager';
 import { tileMargin, tileWidth } from './Tile';
@@ -19,9 +20,16 @@ class App extends React.Component<
   { end: boolean; tiles: TileCollection }
 > {
   public state = {
-    end: false,
+    end: true,
     tiles: fillWithRandomTile(gridSize, [] as TileCollection)!,
   };
+
+  public handleReset = () =>
+    this.setState({
+      end: false,
+      tiles: fillWithRandomTile(gridSize, [] as TileCollection)!,
+    });
+
   public handleChange = (updatedTiles: TileCollection) => {
     this.setState(({ tiles: currentTiles }) => {
       if (isCollectionSame(updatedTiles, currentTiles)) {
@@ -52,6 +60,7 @@ class App extends React.Component<
         />
         <Background size={size} tileWidth={tileWidth} tileMargin={tileMargin} />
         <Grid gridSize={size} tiles={tiles} />
+        <End visible={end} onReset={this.handleReset} />
       </Container>
     );
   }

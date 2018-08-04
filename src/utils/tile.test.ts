@@ -1,4 +1,4 @@
-import { cleanNulls, getTile, moveTilesToSide } from './tile';
+import { canCombinePairs, cleanNulls, getTile, moveTilesToSide } from './tile';
 
 describe('Tile', () => {
   describe('cleanNulls()', () => {
@@ -80,6 +80,31 @@ describe('Tile', () => {
       expect(result[2]!.value).toEqual(8);
       expect(result[3]!.id).toBe(third.id);
       expect(result[3]!.value).toBe(8);
+    });
+  });
+
+  describe('canCombinePairs', () => {
+    it('returns true if combining pairs is possible', () => {
+      const result = canCombinePairs([getTile(), null, getTile(), null]);
+
+      expect(result).toBe(true);
+    });
+
+    it('returns false if cannot combine pairs', () => {
+      const result = canCombinePairs([null, null, getTile(), null]);
+
+      expect(result).toBe(false);
+    });
+
+    it('returns false if cannot combine pairs #2', () => {
+      const result = canCombinePairs([
+        getTile({ value: 16 }),
+        getTile({ value: 4 }),
+        getTile(),
+        getTile({ value: 32 }),
+      ]);
+
+      expect(result).toBe(false);
     });
   });
 });

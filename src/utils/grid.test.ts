@@ -1,11 +1,12 @@
 import {
+  canCombineGridTiles,
   fillWithRandomTile,
   moveTwoDimensionTilesTo,
   swapMatrixByDirection,
   turnFlatArrayToGrid,
   turnGridToFlatArray,
 } from './grid';
-import { cleanNulls, getTile } from './tile';
+import { cleanNulls, getTile, PTileCollection } from './tile';
 
 describe('Grid utility functions', () => {
   const originalTiles = [
@@ -23,7 +24,7 @@ describe('Grid utility functions', () => {
     ],
     [null, null, getTile({ index: 10 }), null],
     [null, null, null, getTile({ value: 32, index: 15 })],
-  ];
+  ] as PTileCollection[];
 
   describe('swapMatrixByDirection()', () => {
     it('swaps rows to columns', () => {
@@ -138,7 +139,7 @@ describe('Grid utility functions', () => {
           ...originalTiles[1],
           ...originalTiles[2],
           ...originalTiles[3],
-        ]).sort((a, b) => b.index - a.index),
+        ]),
       );
     });
   });
@@ -166,6 +167,69 @@ describe('Grid utility functions', () => {
     it('fills a random empty tile and return a new instance', () => {
       expect(result).not.toEqual(flatten);
       expect(result!.length).toBeGreaterThan(flatten.length);
+    });
+  });
+
+  describe('fillWithRandomTile()', () => {
+    const flatten = turnGridToFlatArray(originalTiles);
+    const result = fillWithRandomTile(16, flatten);
+
+    it('fills a random empty tile and return a new instance', () => {
+      expect(result).not.toEqual(flatten);
+      expect(result!.length).toBeGreaterThan(flatten.length);
+    });
+  });
+
+  describe('canCombineGridTiles()', () => {
+    it('returns true if the collection has empty slots', () => {
+      const result = canCombineGridTiles(4, turnGridToFlatArray(originalTiles));
+      expect(result).toBe(true);
+    });
+
+    it('returns true if collection is full but combination is possible', () => {
+      const result = canCombineGridTiles(
+        4,
+        turnGridToFlatArray([
+          [getTile(), getTile({ value: 4 }), getTile(), getTile({ value: 4 })],
+          [getTile(), getTile({ value: 4 }), getTile(), getTile({ value: 4 })],
+          [getTile(), getTile({ value: 4 }), getTile(), getTile({ value: 4 })],
+          [getTile(), getTile({ value: 4 }), getTile(), getTile({ value: 4 })],
+        ]),
+      );
+      expect(result).toBe(true);
+    });
+
+    it('returns false if collection is full and there is no possible combination horizontally or vertically', () => {
+      const result = canCombineGridTiles(
+        4,
+        turnGridToFlatArray([
+          [
+            getTile({ value: 2 }),
+            getTile({ value: 4 }),
+            getTile({ value: 8 }),
+            getTile({ value: 16 }),
+          ],
+          [
+            getTile({ value: 4 }),
+            getTile({ value: 8 }),
+            getTile({ value: 16 }),
+            getTile({ value: 32 }),
+          ],
+          [
+            getTile({ value: 8 }),
+            getTile({ value: 16 }),
+            getTile({ value: 32 }),
+            getTile({ value: 64 }),
+          ],
+          [
+            getTile({ value: 16 }),
+            getTile({ value: 32 }),
+            getTile({ value: 64 }),
+            getTile({ value: 128 }),
+          ],
+        ]),
+      );
+      expect(result).toBe(false);
     });
   });
 });

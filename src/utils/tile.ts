@@ -38,7 +38,8 @@ export const sortedCollection = (
   }
 };
 
-export const filterNulls = (tile: PTileModel) => Boolean(tile);
+export const filterNulls = (tile: PTileModel): tile is TileModel =>
+  Boolean(tile);
 export const cleanNulls = (collection: PTileCollection) =>
   collection.filter(filterNulls) as TileCollection;
 
@@ -80,4 +81,33 @@ export const moveTilesToSide = (
   ];
 
   return sortedCollection(filledWithNull, direction);
+};
+
+export const canCombinePairs = (tiles: PTileCollection) => {
+  return tiles.filter(filterNulls).reduce(
+    (acc, tile) => {
+      const { canCombine, collection } = acc;
+      if (canCombine) {
+        return acc;
+      }
+
+      const lastTile = collection.pop();
+
+      return {
+        canCombine: lastTile
+          ? lastTile && lastTile.value === tile.value
+          : false,
+        collection: [...collection, tile],
+      };
+
+      return acc;
+    },
+    {
+      canCombine: false,
+      collection: [],
+    } as {
+      canCombine: boolean;
+      collection: TileCollection;
+    },
+  ).canCombine;
 };

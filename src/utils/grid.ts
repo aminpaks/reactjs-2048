@@ -2,6 +2,7 @@ import isEqual from 'fast-deep-equal';
 import { buildArray } from './arrays';
 import { getEmptyRandomIndex } from './random';
 import {
+  canCombinePairs,
   DirectionType,
   getTile,
   moveTilesToSide,
@@ -135,4 +136,32 @@ export const isCollectionSame = (
   const shallowSecond = [...second].sort((a, b) => a.index - b.index);
 
   return isEqual(shallowFirst, shallowSecond);
+};
+
+export const canCombineGridTiles = (
+  dimensionSize: number,
+  tiles: TileCollection,
+) => {
+  if (tiles.length < dimensionSize ** 2) {
+    return true;
+  }
+
+  // Structures a two dimension matrix
+  const gridTiles = turnFlatArrayToGrid(dimensionSize, tiles);
+
+  // Only checks for horizontal combinations
+  const horizontalMoreMove = gridTiles.some(row => canCombinePairs(row));
+
+  if (horizontalMoreMove) {
+    return true;
+  }
+
+  // Swaps the matrix to check for vertical combinations
+  const verticalMoreMoves = swapMatrixByDirection(
+    dimensionSize,
+    'bottom',
+    gridTiles,
+  ).some(row => canCombinePairs(row));
+
+  return verticalMoreMoves;
 };

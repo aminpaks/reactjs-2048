@@ -4,17 +4,22 @@ import { Background } from './Background';
 import { Grid } from './Grid';
 import { KeyManager } from './KeyManager';
 import { tileMargin, tileWidth } from './Tile';
-import { fillWithRandomTile, isCollectionSame, TileCollection } from './utils';
+import {
+  canCombineGridTiles,
+  fillWithRandomTile,
+  isCollectionSame,
+  TileCollection,
+} from './utils';
 
 const size = 4;
 const gridSize = size ** 2;
 
 class App extends React.Component<
   any,
-  { ended: boolean; tiles: TileCollection }
+  { end: boolean; tiles: TileCollection }
 > {
   public state = {
-    ended: false,
+    end: false,
     tiles: fillWithRandomTile(gridSize, [] as TileCollection)!,
   };
   public handleChange = (updatedTiles: TileCollection) => {
@@ -27,6 +32,7 @@ class App extends React.Component<
 
       if (filledOneEmptyTile) {
         return {
+          end: !canCombineGridTiles(size, filledOneEmptyTile),
           tiles: filledOneEmptyTile.sort((a, b) => Number(a.id < b.id)),
         };
       }
@@ -35,14 +41,14 @@ class App extends React.Component<
     });
   };
   public render() {
-    const { tiles, ended } = this.state;
+    const { tiles, end } = this.state;
     (window as any).tiles = tiles;
     return (
       <Container>
         <KeyManager
           tiles={tiles}
           dimensionSize={size}
-          onChange={ended ? undefined : this.handleChange}
+          onChange={end ? undefined : this.handleChange}
         />
         <Background size={size} tileWidth={tileWidth} tileMargin={tileMargin} />
         <Grid gridSize={size} tiles={tiles} />

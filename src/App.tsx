@@ -5,25 +5,26 @@ import { Background } from './Background';
 import { Grid } from './Grid';
 import { KeyManager } from './KeyManager';
 import { tileMargin, tileWidth } from './Tile';
-import { fillWithRandomTile, getEmptyGrid, PTileCollection } from './utils';
+import { fillWithRandomTile, TileCollection } from './utils';
 
 const size = 4;
+const gridSize = size ** 2;
 
 class App extends React.Component<
   any,
-  { ended: boolean; tiles: PTileCollection[] }
+  { ended: boolean; tiles: TileCollection }
 > {
   public state = {
     ended: false,
-    tiles: fillWithRandomTile(getEmptyGrid(size))!,
+    tiles: fillWithRandomTile(gridSize, [] as TileCollection)!,
   };
-  public handleChange = (updatedTiles: PTileCollection[]) => {
+  public handleChange = (updatedTiles: TileCollection) => {
     this.setState(({ tiles: currentTiles }) => {
       if (isEqual(updatedTiles, currentTiles)) {
         return null;
       }
 
-      const filledOneEmptyTile = fillWithRandomTile(updatedTiles);
+      const filledOneEmptyTile = fillWithRandomTile(gridSize, updatedTiles);
 
       if (filledOneEmptyTile) {
         return { tiles: filledOneEmptyTile };
@@ -39,6 +40,7 @@ class App extends React.Component<
       <Container>
         <KeyManager
           tiles={tiles}
+          dimensionSize={size}
           onChange={ended ? undefined : this.handleChange}
         />
         <Background size={size} tileWidth={tileWidth} tileMargin={tileMargin} />

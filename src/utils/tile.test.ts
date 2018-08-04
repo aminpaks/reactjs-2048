@@ -61,9 +61,9 @@ describe('Tile', () => {
 
       expect(result[0]).toBeNull();
       expect(result[1]).toBeNull();
-      expect(result[2]!.id).toBe(second.id);
+      expect(result[2]!.id).toBe(first.id);
       expect(result[2]!.value).toBe(8);
-      expect(result[3]!.id).toBe(forth.id);
+      expect(result[3]!.id).toBe(third.id);
       expect(result[3]!.value).toBe(16);
     });
 
@@ -76,9 +76,9 @@ describe('Tile', () => {
 
       expect(result[0]).toBeNull();
       expect(result[1]).toBeNull();
-      expect(result[2]!.id).toEqual(second.id);
+      expect(result[2]!.id).toEqual(first.id);
       expect(result[2]!.value).toEqual(8);
-      expect(result[3]!.id).toBe(forth.id);
+      expect(result[3]!.id).toBe(third.id);
       expect(result[3]!.value).toBe(8);
     });
   });

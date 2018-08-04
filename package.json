@@ -2,6 +2,7 @@
   "name": "game-2084",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://aminpaks.github.io/reactjs-2048/build",
   "dependencies": {
     "fast-deep-equal": "^2.0.1",
     "react": "^16.4.1",

@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import EventListener from 'react-event-listener';
-import { moveTwoDimensionTilesTo, PTileCollection } from './utils';
+import {
+  moveTwoDimensionTilesTo,
+  PTileCollection,
+  TileCollection,
+  turnFlatArrayToGrid,
+  turnGridToFlatArray,
+} from './utils';
 
 interface KeyManagerProps {
-  tiles: PTileCollection[];
-  onChange?: (tiles: ReadonlyArray<PTileCollection>) => void;
+  dimensionSize: number;
+  tiles: TileCollection;
+  onChange?: (tiles: TileCollection) => void;
 }
 
 export const moveTiles = (code: string, tiles: PTileCollection[]) => {
@@ -24,12 +31,14 @@ export const moveTiles = (code: string, tiles: PTileCollection[]) => {
 
 export class KeyManager extends Component<KeyManagerProps> {
   public handleKeyDown = ({ code }: KeyboardEvent) => {
-    const { onChange, tiles } = this.props;
+    const { onChange, tiles, dimensionSize } = this.props;
     if (typeof onChange === 'function') {
-      const updatedTiles = moveTiles(code, tiles);
+      const gridTiles = turnFlatArrayToGrid(dimensionSize, tiles);
+      const updatedTiles = moveTiles(code, gridTiles);
 
       if (updatedTiles) {
-        onChange(updatedTiles);
+        const flattenList = turnGridToFlatArray(updatedTiles);
+        onChange(flattenList);
       }
     }
   };

@@ -4,18 +4,18 @@ import {
   StyledGridWrapper as Wrapper,
 } from './Grid.styled';
 import { Tile } from './Tile';
-import { PTileCollection, turnGridToFlatArray } from './utils';
+import { TileCollection } from './utils';
 
 export const Grid = ({
   tiles,
   gridSize,
 }: {
   gridSize: number;
-  tiles: PTileCollection[];
+  tiles: TileCollection;
 }) => (
   <Container>
     <Wrapper>
-      {turnGridToFlatArray(tiles).map(
+      {tiles.map(
         tile => tile && <Tile key={tile.id} gridSize={gridSize} tile={tile} />,
       )}
     </Wrapper>

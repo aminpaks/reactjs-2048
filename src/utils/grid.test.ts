@@ -5,14 +5,24 @@ import {
   turnFlatArrayToGrid,
   turnGridToFlatArray,
 } from './grid';
-import { getTile } from './tile';
+import { cleanNulls, getTile } from './tile';
 
 describe('Grid utility functions', () => {
   const originalTiles = [
-    [getTile({ value: 64 }), null, null, getTile({ value: 8 })],
-    [null, getTile(), getTile(), getTile({ value: 4 })],
-    [null, null, getTile(), null],
-    [null, null, null, getTile({ value: 32 })],
+    [
+      getTile({ value: 64, index: 0 }),
+      null,
+      null,
+      getTile({ value: 8, index: 3 }),
+    ],
+    [
+      null,
+      getTile({ index: 5 }),
+      getTile({ index: 6 }),
+      getTile({ value: 4, index: 7 }),
+    ],
+    [null, null, getTile({ index: 10 }), null],
+    [null, null, null, getTile({ value: 32, index: 15 })],
   ];
 
   describe('swapMatrixByDirection()', () => {
@@ -122,22 +132,27 @@ describe('Grid utility functions', () => {
     const flat = turnGridToFlatArray(originalTiles);
 
     it('flattens a two dimension array of tiles', () => {
-      expect(flat).toEqual([
-        ...originalTiles[0],
-        ...originalTiles[1],
-        ...originalTiles[2],
-        ...originalTiles[3],
-      ]);
+      expect(flat).toEqual(
+        cleanNulls([
+          ...originalTiles[0],
+          ...originalTiles[1],
+          ...originalTiles[2],
+          ...originalTiles[3],
+        ]).sort((a, b) => b.index - a.index),
+      );
     });
   });
 
   describe('turnFlatArrayToGrid()', () => {
-    const result = turnFlatArrayToGrid(4, [
-      ...originalTiles[0],
-      ...originalTiles[1],
-      ...originalTiles[2],
-      ...originalTiles[3],
-    ]);
+    const result = turnFlatArrayToGrid(
+      4,
+      cleanNulls([
+        ...originalTiles[0],
+        ...originalTiles[1],
+        ...originalTiles[2],
+        ...originalTiles[3],
+      ]),
+    );
 
     it('restructures a grid from a flatten array of tiles', () => {
       expect(originalTiles).toEqual(result);
@@ -145,88 +160,12 @@ describe('Grid utility functions', () => {
   });
 
   describe('fillWithRandomTile()', () => {
-    const result = fillWithRandomTile(originalTiles);
+    const flatten = turnGridToFlatArray(originalTiles);
+    const result = fillWithRandomTile(16, flatten);
 
     it('fills a random empty tile and return a new instance', () => {
-      expect(result).not.toEqual(originalTiles);
+      expect(result).not.toEqual(flatten);
+      expect(result!.length).toBeGreaterThan(flatten.length);
     });
-  });
-
-  describe.only('test', () => {
-    const tiles = [
-      [
-        {
-          id: '67983402000117390000-87883308875296540000',
-          index: 3,
-          updated: 1533347163026,
-          value: 4,
-        },
-        null,
-        null,
-        null,
-      ],
-      [
-        {
-          id: '84024975225511120000-55138240607216500000',
-          index: 7,
-          updated: 1533347008462,
-          value: 2,
-        },
-        {
-          id: '29127723846713405000-42705768595668840000',
-          updated: 1533347163676,
-          value: 2,
-        },
-        null,
-        null,
-      ],
-      [
-        {
-          id: '28885718182740017000-78401773748810510000',
-          index: 11,
-          updated: 1533347013039,
-          value: 8,
-        },
-        {
-          id: '84590067259582800000-92500659183458980000',
-          index: 10,
-          updated: 1533347147595,
-          value: 4,
-        },
-        null,
-        null,
-      ],
-      [
-        {
-          id: '87595587756750390000-77413212973021410000',
-          index: 15,
-          updated: 1533347000133,
-          value: 16,
-        },
-        {
-          id: '8979232296304973000-64619379891120870000',
-          index: 14,
-          updated: 1533347013039,
-          value: 4,
-        },
-        {
-          id: '52600275159288540000-14275365010472374000',
-          index: 13,
-          updated: 1533347014336,
-          value: 2,
-        },
-        {
-          id: '23052107976305590000-59933654239339586000',
-          index: 12,
-          updated: 1533347014336,
-          value: 4,
-        },
-      ],
-    ];
-    // const result = moveTwoDimensionTilesTo(tiles, 'bottom');
-    // tslint:disable-next-line:no-console
-    console.log(tiles);
-    // console.log(result);
-    expect(true).toBeFalsy();
   });
 });

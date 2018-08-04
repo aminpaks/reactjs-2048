@@ -6,7 +6,6 @@ export type TileValue = number | null;
 export interface TileModel {
   id: string;
   value: number;
-  updated: number;
   index: number;
 }
 export type TileCollection = TileModel[];
@@ -15,12 +14,12 @@ export type PTileCollection = PTileModel[];
 
 export const getTile = ({
   id = generateKey(),
+  index = 0,
   value = 2,
 }: Partial<TileModel> = {}) =>
   Object.freeze<TileModel>({
     id,
-    index: 0,
-    updated: Date.now(),
+    index,
     value,
   });
 
@@ -39,8 +38,9 @@ export const sortedCollection = (
   }
 };
 
+export const filterNulls = (tile: PTileModel) => Boolean(tile);
 export const cleanNulls = (collection: PTileCollection) =>
-  collection.filter(tile => Boolean(tile));
+  collection.filter(filterNulls) as TileCollection;
 
 export const sanitizePair = (
   first: PTileModel,
@@ -51,7 +51,7 @@ export const sanitizePair = (
     if (first && second && first.value === second.value) {
       return [
         getTile({
-          ...(['right', 'bottom'].indexOf(direction) >= 0 ? first : second),
+          ...second,
           value: first.value + second.value,
         }),
       ];

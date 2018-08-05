@@ -3,6 +3,7 @@ import { CSSTransition } from 'react-transition-group';
 import {
   StyledButton as Button,
   StyledContainer as Container,
+  StyledTitle as Title,
   StyledWrapper as Wrapper,
 } from './End.styled';
 
@@ -21,7 +22,7 @@ export const End = ({
   >
     <Wrapper>
       <Container>
-        <span>End!</span>
+        <Title>End!</Title>
         <div>
           <Button onClick={onReset}>Start over</Button>
         </div>

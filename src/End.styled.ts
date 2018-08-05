@@ -34,51 +34,49 @@ export const StyledWrapper = styled.div`
 
 export const StyledContainer = styled.div`
   display: flex;
+  font-size: 3rem;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  width: 100%;
-  min-height: 300px;
-  @media (min-width: 500px) {
-    width: 480px;
-  }
-
-  font-size: 3rem;
-  border-radius: 4px;
-  background-color: #fff;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-
-  &.container-enter {
-    opacity: 0;
-  }
-  &.container-enter-active {
-    opacity: 1;
-  }
+  text-shadow: 0 0 10px #fff;
 `;
 
 export const StyledButton = styled.button`
-  margin: 1em;
   padding: 1em 2em;
   font-size: 0.5em;
   overflow: hidden;
   position: relative;
-  outline: none;
-
-  border: 1px solid #000;
+  border: 1px solid transparent;
   border-radius: 0.5em;
+  transition: 220ms ease;
+  background-color: rgba(255, 255, 255, 0.8);
   background-image: linear-gradient(
-    45deg,
+    55deg,
     rgba(0, 0, 0, 0.1),
     rgba(0, 0, 0, 0.2)
   );
+  box-shadow: 0 0 50px 0 inset rgba(0, 0, 0, 0), 0 4px 30px rgba(0, 0, 0, 0.3);
+  outline: none;
   cursor: pointer;
 
   ${CssGlare};
+  &::before {
+    transition: 220ms ease;
+  }
   &:focus,
   &:hover {
+    border-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 50px 0 inset rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 0, 0, 0.3);
+
     &::before {
-      transform: scale(1.2);
+      transform: scale(1.4);
     }
   }
+  &:focus {
+    box-shadow: 0 0 50px 0 inset rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+export const StyledTitle = styled.h3`
+  margin-top: 0;
 `;

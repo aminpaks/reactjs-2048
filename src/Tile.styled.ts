@@ -15,11 +15,13 @@ export const StyledTileContainer = styled.div`
   ${CssTile};
   font-size: 20px;
   background-image: linear-gradient(45deg, orange, yellow);
-  transition: 130ms ease-out;
+  transition: 140ms ease-out, transform 120ms 100ms ease-out;
+  animation-delay: 220ms;
   user-select: none;
   cursor: default;
 
   span {
+    font-weight: 600;
     position: relative;
     z-index: 1;
   }

@@ -9,7 +9,6 @@ export const CssGlare = css`
     height: 100%;
     display: block;
     position: absolute;
-    transition: 120ms ease-in-out;
     background-image: linear-gradient(
       55deg,
       rgba(255, 255, 255, 0) 40%,

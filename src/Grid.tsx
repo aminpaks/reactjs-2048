@@ -21,7 +21,7 @@ export const Grid = ({
           <CSSTransition
             key={tile.id}
             classNames="tile"
-            timeout={220}
+            timeout={620}
             in={true}
             appear={true}
             unmountOnExit={true}

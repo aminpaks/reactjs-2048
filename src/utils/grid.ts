@@ -128,12 +128,19 @@ export const fillWithRandomTile = (gridSize: number, tiles: TileCollection) => {
   return null;
 };
 
+const sortByIndex = (a: TileModel, b: TileModel): number => a.index - b.index;
+const simplifyTile = ({ id, value, index }: TileModel) => ({
+  id,
+  index,
+  value,
+});
+
 export const isCollectionSame = (
   first: TileCollection,
   second: TileCollection,
 ) => {
-  const shallowFirst = [...first].sort((a, b) => a.index - b.index);
-  const shallowSecond = [...second].sort((a, b) => a.index - b.index);
+  const shallowFirst = [...first].sort(sortByIndex).map(simplifyTile);
+  const shallowSecond = [...second].sort(sortByIndex).map(simplifyTile);
 
   return isEqual(shallowFirst, shallowSecond);
 };

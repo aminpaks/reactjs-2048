@@ -30,13 +30,19 @@ describe('Tile', () => {
 
     it('moves to right', () => {
       const result = moveTilesToSide(
-        [getTile({ value: 2 }), null, getTile({ value: 4 }), null],
+        [
+          getTile({ value: 2, merged: true }),
+          null,
+          getTile({ value: 4 }),
+          null,
+        ],
         'right',
       );
 
       expect(result[0]).toBeNull();
       expect(result[1]).toBeNull();
       expect(result[2]!.value).toBe(2);
+      expect(result[2]!.merged).toBe(false);
       expect(result[3]!.value).toBe(4);
     });
 
@@ -50,6 +56,7 @@ describe('Tile', () => {
       expect(result[1]).toBeNull();
       expect(result[2]).toBeNull();
       expect(result[3]!.value).toBe(8);
+      expect(result[3]!.merged).toBe(true);
     });
 
     it('moves to bottom and sum up two levels', () => {
@@ -63,8 +70,10 @@ describe('Tile', () => {
       expect(result[1]).toBeNull();
       expect(result[2]!.id).toBe(first.id);
       expect(result[2]!.value).toBe(8);
+      expect(result[2]!.merged).toBe(true);
       expect(result[3]!.id).toBe(third.id);
       expect(result[3]!.value).toBe(16);
+      expect(result[3]!.merged).toBe(true);
     });
 
     it('moves to right and sum up two same levels', () => {
@@ -83,7 +92,7 @@ describe('Tile', () => {
     });
   });
 
-  describe('canCombinePairs', () => {
+  describe('canCombinePairs()', () => {
     it('returns true if combining pairs is possible', () => {
       const result = canCombinePairs([getTile(), null, getTile(), null]);
 

@@ -7,6 +7,7 @@ export interface TileModel {
   id: string;
   value: number;
   index: number;
+  merged: boolean;
 }
 export type TileCollection = TileModel[];
 export type PTileModel = TileModel | null;
@@ -15,11 +16,13 @@ export type PTileCollection = PTileModel[];
 export const getTile = ({
   id = generateKey(),
   index = 0,
+  merged = false,
   value = 2,
 }: Partial<TileModel> = {}) =>
   Object.freeze<TileModel>({
     id,
     index,
+    merged,
     value,
   });
 
@@ -46,13 +49,13 @@ export const cleanNulls = (collection: PTileCollection) =>
 export const sanitizePair = (
   first: PTileModel,
   second: PTileModel,
-  direction: DirectionType,
 ): TileModel[] => {
   if (first || second) {
     if (first && second && first.value === second.value) {
       return [
         getTile({
           ...second,
+          merged: true,
           value: first.value + second.value,
         }),
       ];
@@ -67,13 +70,13 @@ export const moveTilesToSide = (
   direction: DirectionType,
 ) => {
   const { length: size } = collection;
-  const result = cleanNulls(sortedCollection(collection, direction)).reduce<
-    PTileCollection
-  >((acc, tile) => {
-    const first = acc.pop() || null;
-    const pair = sanitizePair(first, tile, direction);
-    return [...acc, ...pair];
-  }, []);
+  const result = cleanNulls(sortedCollection(collection, direction))
+    .map(tile => ({ ...tile, merged: false }))
+    .reduce<PTileCollection>((acc, tile) => {
+      const first = acc.pop() || null;
+      const pair = sanitizePair(first, tile);
+      return [...acc, ...pair];
+    }, []);
 
   const filledWithNull = [
     ...result,

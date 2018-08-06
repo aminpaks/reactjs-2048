@@ -28,6 +28,23 @@ describe('Tile', () => {
       expect(result[3]).toBeNull();
     });
 
+    it.only('moves to left two levels', () => {
+      const tiles = [
+        getTile({ value: 4 }),
+        getTile({ value: 4 }),
+        getTile({ value: 8 }),
+        null,
+      ];
+      const result = moveTilesToSide(tiles, 'left');
+
+      expect(result[0]!.value).toBe(8);
+      expect(result[0]!.id).toBe(tiles[1]!.id);
+      expect(result[1]!.value).toBe(8);
+      expect(result[1]!.id).toBe(tiles[2]!.id);
+      expect(result[2]).toBeNull();
+      expect(result[3]).toBeNull();
+    });
+
     it('moves to right', () => {
       const result = moveTilesToSide(
         [

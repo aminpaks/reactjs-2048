@@ -51,7 +51,13 @@ export const sanitizePair = (
   second: PTileModel,
 ): TileModel[] => {
   if (first || second) {
-    if (first && second && first.value === second.value) {
+    if (
+      first &&
+      second &&
+      !first.merged &&
+      !second.merged &&
+      first.value === second.value
+    ) {
       return [
         getTile({
           ...second,
@@ -71,12 +77,12 @@ export const moveTilesToSide = (
 ) => {
   const { length: size } = collection;
   const result = cleanNulls(sortedCollection(collection, direction))
-    .map(tile => ({ ...tile, merged: false }))
     .reduce<PTileCollection>((acc, tile) => {
       const first = acc.pop() || null;
       const pair = sanitizePair(first, tile);
       return [...acc, ...pair];
-    }, []);
+    }, [])
+    .map(tile => ({ ...tile, merged: false } as TileModel));
 
   const filledWithNull = [
     ...result,

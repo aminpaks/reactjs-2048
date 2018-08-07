@@ -1,5 +1,5 @@
 import React from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { config, Transition } from 'react-spring';
 import {
   StyledGridContainer as Container,
   StyledGridWrapper as Wrapper,
@@ -16,20 +16,22 @@ export const Grid = ({
 }) => (
   <Container>
     <Wrapper>
-      <TransitionGroup component={null}>
-        {tiles.map(tile => (
-          <CSSTransition
+      <Transition
+        keys={tiles.map(tile => tile.id)}
+        from={{ opacity: 0, transform: 'scale(0)' }}
+        enter={{ opacity: 1, transform: 'scale(1)' }}
+        leave={{ opacity: 0, transform: 'scale(0)' }}
+        config={config.gentle}
+      >
+        {tiles.map(tile => (styles: any) => (
+          <Tile
             key={tile.id}
-            classNames="tile"
-            timeout={620}
-            in={true}
-            appear={true}
-            unmountOnExit={true}
-          >
-            <Tile gridSize={gridSize} tile={tile} />
-          </CSSTransition>
+            gridSize={gridSize}
+            tile={tile}
+            extraStyles={styles}
+          />
         ))}
-      </TransitionGroup>
+      </Transition>
     </Wrapper>
   </Container>
 );

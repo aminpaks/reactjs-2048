@@ -6,9 +6,24 @@ const aniBounce = keyframes`
     transform: scale(1);
   }
   60% {
-    transform: scale(1.2);
+    transform: scale(1.3);
   }
   100% {
+    transform: scale(1);
+  }
+`;
+
+const aniFadeOut = keyframes`
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
     transform: scale(1);
   }
 `;
@@ -29,41 +44,48 @@ export const StyledTileContainer = styled.div`
 
   font-size: 20px;
   background-image: linear-gradient(45deg, orange, yellow);
-  transition: 140ms ease-out, transform 120ms 100ms ease-out;
   user-select: none;
   cursor: default;
+`;
 
-  span {
-    font-weight: 600;
-    position: relative;
-    z-index: 1;
-  }
+export const StyledTileValue = styled.span`
+  font-weight: 600;
+  position: relative;
+  z-index: 3;
 
-  &.tile-enter {
-    transform: scale(0);
-  }
-  &.tile-enter-active {
-    transform: scale(1);
-    z-index: 2;
-  }
-  &.tile-merge {
+  &.tile-value-enter,
+  &.tile-value-done {
     animation-name: none;
   }
-  &.tile-merge-active {
+  &.tile-value-active {
     animation-name: ${aniBounce};
-    animation-delay: 220ms;
-    animation-duration: 400ms;
-    z-index: 2;
+    animation-duration: 200ms;
+    animation-iteration-count: infinite;
   }
-  &.tile-merge-done {
+`;
+
+export const StyledTileGrowInner = styled.span`
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  display: block;
+  overflow: hidden;
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  background-color: transparent;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0)
+  );
+  z-index: 1;
+
+  &.tile-grow-enter,
+  &.tile-grow-done {
     animation-name: none;
   }
-  &.tile-exit {
-    opacity: 1;
-    transform: scale(1);
-  }
-  &.tile-exit-active {
-    opacity: 0;
-    transform: scale(0);
+  &.tile-grow-active {
+    animation: ${aniFadeOut} 200ms infinite;
   }
 `;

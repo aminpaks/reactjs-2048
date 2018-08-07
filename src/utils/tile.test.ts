@@ -28,19 +28,39 @@ describe('Tile', () => {
       expect(result[3]).toBeNull();
     });
 
-    it.only('moves to left two levels', () => {
+    it('moves to left two levels', () => {
       const tiles = [
+        getTile({ value: 2 }),
         getTile({ value: 4 }),
         getTile({ value: 4 }),
         getTile({ value: 8 }),
+      ];
+      const result = moveTilesToSide(tiles, 'left');
+
+      expect(result[0]!.value).toBe(2);
+      expect(result[0]!.id).toBe(tiles[0]!.id);
+      expect(result[1]!.value).toBe(8);
+      expect(result[1]!.id).toBe(tiles[2]!.id);
+      expect(result[1]!.merged).toBe(true);
+      expect(result[2]!.id).toBe(tiles[3]!.id);
+      expect(result[2]!.value).toBe(tiles[3]!.value);
+      expect(result[3]).toBeNull();
+    });
+
+    it('moves to left two levels with null', () => {
+      const tiles = [
         null,
+        getTile({ value: 4 }),
+        getTile({ value: 4 }),
+        getTile({ value: 8 }),
       ];
       const result = moveTilesToSide(tiles, 'left');
 
       expect(result[0]!.value).toBe(8);
-      expect(result[0]!.id).toBe(tiles[1]!.id);
+      expect(result[0]!.id).toBe(tiles[2]!.id);
+      expect(result[0]!.merged).toBe(true);
       expect(result[1]!.value).toBe(8);
-      expect(result[1]!.id).toBe(tiles[2]!.id);
+      expect(result[1]!.id).toBe(tiles[3]!.id);
       expect(result[2]).toBeNull();
       expect(result[3]).toBeNull();
     });

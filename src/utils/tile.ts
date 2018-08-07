@@ -77,12 +77,12 @@ export const moveTilesToSide = (
 ) => {
   const { length: size } = collection;
   const result = cleanNulls(sortedCollection(collection, direction))
+    .map(tile => ({ ...tile, merged: false } as TileModel))
     .reduce<PTileCollection>((acc, tile) => {
       const first = acc.pop() || null;
       const pair = sanitizePair(first, tile);
       return [...acc, ...pair];
-    }, [])
-    .map(tile => ({ ...tile, merged: false } as TileModel));
+    }, []);
 
   const filledWithNull = [
     ...result,

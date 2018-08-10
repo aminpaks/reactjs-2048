@@ -1,6 +1,6 @@
 import isEqual from 'fast-deep-equal';
 import { buildArray } from './arrays';
-import { getEmptyRandomIndex } from './random';
+import { getRandomIndex } from './random';
 import {
   canCombinePairs,
   DirectionType,
@@ -119,7 +119,7 @@ export const fillFirstAvailableEmptyTile = (tiles: PTileCollection) =>
 
 export const fillWithRandomTile = (gridSize: number, tiles: TileCollection) => {
   const indexes = tiles.map(tile => tile.index);
-  const newIndex = getEmptyRandomIndex(indexes, gridSize);
+  const newIndex = getRandomIndex(indexes, gridSize);
 
   if (typeof newIndex === 'number') {
     return [...tiles, getTile({ index: newIndex })];

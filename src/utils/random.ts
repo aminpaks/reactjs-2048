@@ -1,21 +1,22 @@
 export const getRandom = (min: number, max: number) =>
-  Math.round(Math.random() * (max - min)) + min;
+  Math.floor(Math.random() * (max - min)) + min;
 
-export const getEmptyRandomIndex = (indexes: number[], size: number) => {
+export const getRandomIndex = (indexes: number[], size: number) => {
+  const maxIndex = size - 1;
   let counter = 0;
-  let startIndex = getRandom(0, size - 1);
+  let startIndex = getRandom(0, maxIndex);
   while (true) {
     if (indexes.indexOf(startIndex) < 0) {
       return startIndex;
     } else {
-      if (startIndex >= size - 1) {
+      if (startIndex >= maxIndex) {
         startIndex = 0;
       } else {
         startIndex += 1;
       }
     }
 
-    if (counter >= size - 1) {
+    if (counter >= maxIndex) {
       return null;
     }
     counter += 1;

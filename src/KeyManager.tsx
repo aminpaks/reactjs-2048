@@ -14,6 +14,8 @@ interface KeyManagerProps {
   onChange?: (tiles: TileCollection) => void;
 }
 
+const includedKeys = ['ArrowUp', 'ArrowLeft', 'ArrowRight', 'ArrowDown'];
+
 export const moveTiles = (code: string, tiles: PTileCollection[]) => {
   switch (code) {
     case 'ArrowUp':
@@ -30,7 +32,11 @@ export const moveTiles = (code: string, tiles: PTileCollection[]) => {
 };
 
 export class KeyManager extends Component<KeyManagerProps> {
-  public handleKeyDown = ({ code }: KeyboardEvent) => {
+  public handleKeyDown = (event: KeyboardEvent) => {
+    const { code } = event;
+    if (includedKeys.indexOf(code) >= 0) {
+      event.preventDefault();
+    }
     const { onChange, tiles, dimensionSize } = this.props;
     if (typeof onChange === 'function') {
       const gridTiles = turnFlatArrayToGrid(dimensionSize, tiles);

@@ -42,7 +42,7 @@ export const StyledTileContainer = styled.div`
   ${CssTile};
   ${CssGlare};
 
-  font-size: 20px;
+  font-size: 24px;
   background-image: linear-gradient(45deg, orange, yellow);
   user-select: none;
   cursor: default;
